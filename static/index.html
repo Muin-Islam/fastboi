@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Speed Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .speed-test {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .speed-test h1 {
+            margin-bottom: 20px;
+        }
+        .speed-test button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
+        .speed-test button:hover {
+            background-color: #0056b3;
+        }
+        .speed-test .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="speed-test">
+        <h1>Internet Speed Tester</h1>
+        <button onclick="runSpeedTest()">Test Speed</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        async function runSpeedTest() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = 'Testing...';
+
+            try {
+                const response = await fetch('/speedtest');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                resultDiv.innerHTML = `
+                    <p>Download Speed: ${data.download_speed} Mbps</p>
+                    <p>Upload Speed: ${data.upload_speed} Mbps</p>
+                `;
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.textContent = 'Error testing speed. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>
